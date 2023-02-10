@@ -42,5 +42,27 @@ namespace CrudMVC.Controllers
 
             return View(listaContacto);
         }
+
+        public ActionResult Agregar()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Agregar(Contacto agregarContacto)
+        {
+            SqlConnection con = new SqlConnection(conexion);
+            SqlCommand cmd = new SqlCommand("sp_Agregar", con);
+            cmd.Parameters.AddWithValue("Nombre",agregarContacto.Nombre);
+            cmd.Parameters.AddWithValue("Apellido",agregarContacto.Apellido);
+            cmd.Parameters.AddWithValue("Telefono",agregarContacto.Telefono);
+            cmd.Parameters.AddWithValue("Correo",agregarContacto.Correo);
+            cmd.CommandType = CommandType.StoredProcedure;
+            con.Open();
+            cmd.ExecuteNonQuery();
+
+
+            return RedirectToAction("Inicio","Contactos");
+
+        }
     }
 }
