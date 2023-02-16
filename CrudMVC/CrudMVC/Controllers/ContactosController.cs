@@ -42,11 +42,12 @@ namespace CrudMVC.Controllers
 
             return View(listaContacto);
         }
-
+        [HttpGet]
         public ActionResult Agregar()
         {
             return View();
         }
+        
         [HttpPost]
         public ActionResult Agregar(Contacto agregarContacto)
         {
@@ -63,6 +64,38 @@ namespace CrudMVC.Controllers
 
             return RedirectToAction("Inicio","Contactos");
 
+        }
+        [HttpGet]
+        public ActionResult Modificar(int? id)
+        {
+            if (id == null)
+                return RedirectToAction("Inicio", "Contactos");
+
+            var contactoAModificar = (from contacto in listaContacto
+                                           where contacto.IdContacto == id
+                                           select contacto).FirstOrDefault();
+            /*Contacto contactoAModificar = (from contacto in listaContacto
+                                      where contacto.IdContacto == id
+                                      select contacto).FirstOrDefault();*/
+
+            return View(contactoAModificar);
+
+        }
+        [HttpPost]
+        public ActionResult Modificar(Contacto contactoModificado)
+        {
+            SqlConnection con = new SqlConnection(conexion);
+            SqlCommand cmd = new SqlCommand("sp_Editar",con);
+            cmd.Parameters.AddWithValue("IdContacto", contactoModificado.IdContacto);
+            cmd.Parameters.AddWithValue("Nombre", contactoModificado.Nombre);
+            cmd.Parameters.AddWithValue("Apellido", contactoModificado.Apellido);
+            cmd.Parameters.AddWithValue("Telefono",contactoModificado.Telefono);
+            cmd.Parameters.AddWithValue("Correo",contactoModificado.Correo);
+            cmd.CommandType = CommandType.StoredProcedure;
+            con.Open();
+            cmd.ExecuteNonQuery();
+
+            return RedirectToAction("Inicio","Contactos");
         }
     }
 }
