@@ -97,5 +97,34 @@ namespace CrudMVC.Controllers
 
             return RedirectToAction("Inicio","Contactos");
         }
+
+        [HttpGet]
+        public ActionResult Eliminar(int? id)
+        {
+
+            if (id == null)
+                return RedirectToAction("Inicio","Contactos");
+
+            var contactoAEliminar = (from contacto in listaContacto
+                                     where contacto.IdContacto == id
+                                     select contacto).FirstOrDefault();
+
+            return View(contactoAEliminar);
+        }
+
+        [HttpPost]
+        public ActionResult Eliminar(int id)
+        {
+            SqlConnection con = new SqlConnection(conexion);
+            SqlCommand cmd = new SqlCommand("sp_Eliminar", con);
+            cmd.Parameters.AddWithValue("Idcontact", id);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+            con.Open();
+            cmd.ExecuteNonQuery();
+
+            return RedirectToAction("Inicio", "Contactos");
+        }
+
     }
 }

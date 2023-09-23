@@ -1,0 +1,34 @@
+﻿@model CrudMVC.Models.Contacto
+
+@{
+    ViewBag.Title = "Eliminar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" style="margin-top:30px">
+    <div class="col-sm-12">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h4>Eliminar Contacto</h4>
+            </div>
+
+            <div class="panel-body">
+                <div class="alert alert-danger">
+                    ¿Desea eliminar el contacto: @Html.DisplayTextFor(m => m.Nombre) @Html.DisplayTextFor(m => m.Apellido)?
+                </div>
+
+                <form action="@Url.Action("Eliminar","Contactos")" method="post">
+                    <input type="hidden" class="form-control" name="id" value="@Html.DisplayFor(m=>m.IdContacto)" />
+
+                    <button type="submit" class="btn btn-success">Aceptar</button>
+                    <a class="btn btn-warning" href="@Url.Action("Inicio","Contactos")">Volver</a>
+                </form>
+                
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
